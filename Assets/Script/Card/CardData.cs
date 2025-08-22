@@ -5,43 +5,40 @@ using UnityEngine;
 
 public class CardData : MonoBehaviour
 {
-    [Serializable]
-    public class CardParam
+    public static CardData Instance { get; private set; }
+
+    public string path;
+    public List<Card> Cards = new List<Card>();
+
+    private void Awake()
     {
-        public int Index;          // ID của card
-        public int Illustration;   // ID ảnh minh họa
-        public int Type;           // Loại card (sau có thể enum hóa)
-        public int Rarity;         // Độ hiếm
+        // Singleton
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
 
-        public string Name;        // Tên card
-        public int Cost;           // Mana cost
-        public int PopCost;        // Population cost (dùng cho Unit)
-
-        public int EffectValueA;   // Giá trị hiệu ứng A
-        public int EffectValueB;   // Giá trị hiệu ứng B
-        public int EffectValueC;   // Giá trị hiệu ứng C
-        public int EffectValueD;   // Giá trị hiệu ứng D
-
-        public int EffectType;     // Kiểu hiệu ứng (sau có thể enum hóa)
-        public string Effect;      // Mã hoặc tên hiệu ứng
-        public string Description; // Mô tả chi tiết
-        public int Price;          // Giá mua card
+        LoadFromCSV(path);
     }
 
-    public List<CardParam> Cards = new List<CardParam>();
-
-    public void LoadFromCSV(string path)
+    public void LoadFromCSV(string fileName)
     {
         Cards.Clear();
-        string[] lines = File.ReadAllLines(path);
+        TextAsset csvFile = Resources.Load<TextAsset>("Data/" + fileName);
+        string[] lines = csvFile.text.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
 
-        for (int i = 1; i < lines.Length; i++) // bỏ header
+        for (int i = 1; i < lines.Length; i++)
         {
+            if (string.IsNullOrWhiteSpace(lines[i])) continue;
+
             string[] values = lines[i].Split(',');
 
-            CardParam card = new CardParam();
-            card.Index = int.Parse(values[0]);
-            card.Illustration = int.Parse(values[1]);
+            Card card = new Card();
+            card.Id = int.Parse(values[0]);
+            card.IdImage = int.Parse(values[1]);
             card.Type = int.Parse(values[2]);
             card.Rarity = int.Parse(values[3]);
             card.Name = values[4];
