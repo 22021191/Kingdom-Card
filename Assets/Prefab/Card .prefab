@@ -383,6 +383,39 @@ MonoBehaviour:
   descriptionText: {fileID: 3833117227719943776}
   priceText: {fileID: 8078613138170796212}
   cardImage: {fileID: 7666298531273845892}
+  targetRotation: 0
+  targetPosition: {x: 0, y: 0}
+  targetVerticalDisplacement: 0
+  uiLayer: 0
+  canvas: {fileID: 0}
+  zoomConfig:
+    zoomOnHover: 0
+    multiplier: 1.1
+    overrideYPosition: 50
+    defaultSortOrder: 0
+    bringToFrontOnHover: 0
+    zoomedSortOrder: 0
+    resetRotationOnZoom: 0
+  animationSpeedConfig:
+    rotation: 60
+    position: 500
+    releasePosition: 2000
+    zoom: 0.3
+  container: {fileID: 0}
+  eventsConfig:
+    OnCardPlayed:
+      m_PersistentCalls:
+        m_Calls: []
+    OnCardHover:
+      m_PersistentCalls:
+        m_Calls: []
+    OnCardUnhover:
+      m_PersistentCalls:
+        m_Calls: []
+    OnCardDestroy:
+      m_PersistentCalls:
+        m_Calls: []
+  preventCardInteraction: 0
 --- !u!1 &3600975842676285428
 GameObject:
   m_ObjectHideFlags: 0

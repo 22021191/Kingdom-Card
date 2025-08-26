@@ -38,7 +38,7 @@ public class CardContainer : MonoBehaviour {
     [SerializeField]
     private EventsConfig eventsConfig;
     
-    private List<CardView> cards = new();
+    public List<CardView> cards = new();
 
     private RectTransform rectTransform;
     private CardView currentDraggedCard;
@@ -104,6 +104,7 @@ public class CardContainer : MonoBehaviour {
         var canvas = wrapper.GetComponent<Canvas>();
         if (canvas == null) {
             canvas = wrapper.gameObject.AddComponent<Canvas>();
+            wrapper.canvas=wrapper.GetComponent<Canvas>();
         }
 
         canvas.overrideSorting = true;
