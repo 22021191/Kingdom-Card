@@ -3,7 +3,7 @@
 public class Card
 {
     public int Id;          // ID của card
-    public int IdImage;   // ID ảnh minh họa
+    public string IdImage;   // ID ảnh minh họa
     public int Type;           // Loại card (sau có thể enum hóa)
     public int Rarity;         // Độ hiếm
 
@@ -26,7 +26,7 @@ public class Card
 
     }
 
-    public Card(int index, int illustration, int type, int rarity, 
+    public Card(int index, string illustration, int type, int rarity, 
         string name, int cost, int popCost, int effectValueA, 
         int effectValueB, int effectValueC, int effectValueD,
         int effectType, string effect, string description, int price)

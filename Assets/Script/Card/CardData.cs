@@ -9,6 +9,7 @@ public class CardData : MonoBehaviour
 
     public string path;
     public List<Card> Cards = new List<Card>();
+    public Sprite[] bubbleSprites;
 
     private void Awake()
     {
@@ -22,6 +23,8 @@ public class CardData : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         LoadFromCSV(path);
+        bubbleSprites = Resources.LoadAll<Sprite>("PNG/Card");
+        Debug.Log(bubbleSprites.Length);
     }
 
     public void LoadFromCSV(string fileName)
@@ -38,7 +41,7 @@ public class CardData : MonoBehaviour
 
             Card card = new Card();
             card.Id = int.Parse(values[0]);
-            card.IdImage = int.Parse(values[1]);
+            card.IdImage = values[1];
             card.Type = int.Parse(values[2]);
             card.Rarity = int.Parse(values[3]);
             card.Name = values[4];
