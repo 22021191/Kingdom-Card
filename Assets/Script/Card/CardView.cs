@@ -14,7 +14,6 @@ public class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     IPointerUpHandler
 {
     private const float EPS = 0.01f;
-    public int cardId;
     private Card card;
 
     #region UI
@@ -45,11 +44,15 @@ public class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public EventsConfig eventsConfig;
     public bool preventCardInteraction;
     #endregion
-    public void Init( int id)
+    public void Init( Card cards)
     {
-        cardId=id;
-        card=CardData.Instance.Cards[cardId];
+        card = cards;
         SetCardSprite(card.IdImage);
+        if (canvas == null)
+        {
+            canvas = gameObject.AddComponent<Canvas>();
+           
+        }
 
     }
     public float width
@@ -80,7 +83,6 @@ public class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     private void Start()
     {
         canvas = GetComponent<Canvas>();
-        Init(0);
     }
     // Update is called once per frame
     void Update()

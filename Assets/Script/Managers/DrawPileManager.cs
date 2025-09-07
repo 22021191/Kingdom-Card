@@ -10,14 +10,14 @@ public class DrawPileManager : MonoBehaviour
     private int currentIndex = 0;
     public int maxHandSize;
     public int currentHandSize;
-    private HandManager handManager;
+    private CardContainer handManager;
     private DiscardManager discardManager;
 
     public TextMeshProUGUI drawPileCounter;
 
     void Start()
     {
-        handManager = FindObjectOfType<HandManager>();
+        handManager = FindObjectOfType<CardContainer>();
     }
 
     void Update()
@@ -44,7 +44,7 @@ public class DrawPileManager : MonoBehaviour
         }
     }
 
-    public void DrawCard(HandManager handManager)
+    public void DrawCard(CardContainer handManager)
     {
         if (drawPile.Count == 0)
         {

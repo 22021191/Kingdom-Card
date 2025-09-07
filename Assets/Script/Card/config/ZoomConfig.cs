@@ -17,7 +17,7 @@ namespace config {
         public float overrideYPosition = -1;
 
         [Header("UI Layer")]
-        [Tooltip("This is the sorting order of the first card when it is not zoomed in. Subsequent cards will have a higher sorting order.")]
+        [Tooltip("This is the sorting order of the first card when it is not zoomed in. Subsequent cardsInHand will have a higher sorting order.")]
         [SerializeField]
         public int defaultSortOrder;
         

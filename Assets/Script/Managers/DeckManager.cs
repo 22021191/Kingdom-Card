@@ -8,16 +8,16 @@ public class DeckManager : MonoBehaviour
 
     public int startingHandSize = 6;
     public int maxHandSize = 12;
-    private HandManager handManager;
+    public CardContainer handManager;
     private DrawPileManager drawPileManager;
     private bool startBattleRun = true;
 
     void Start()
     {
         //Load all card assets from the Resources folder
-        Card[] cards =CardData.Instance.Cards.ToArray();
+        Card[] cards = CardData.Instance.Cards.ToArray();
 
-        //Add the loaded cards to the allCards list
+        //Add the loaded cardsInHand to the allCards list
         allCards.AddRange(cards);
     }
 
@@ -29,7 +29,7 @@ public class DeckManager : MonoBehaviour
         }
         if (handManager == null)
         {
-            handManager = FindObjectOfType<HandManager>();
+            handManager = FindObjectOfType<CardContainer>();
         }
     }
 
@@ -43,7 +43,6 @@ public class DeckManager : MonoBehaviour
 
     public void BattleSetup()
     {
-        handManager.BattleSetup(maxHandSize);
         drawPileManager.MakeDrawPile(allCards);
         drawPileManager.BattleSetup(startingHandSize, maxHandSize);
         startBattleRun = false;

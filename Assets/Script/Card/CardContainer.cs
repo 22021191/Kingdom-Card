@@ -37,8 +37,8 @@ public class CardContainer : MonoBehaviour {
     [Header("Events")]
     [SerializeField]
     private EventsConfig eventsConfig;
-    
-    public List<CardView> cards = new();
+    public GameObject cardPrefab;
+    public List<CardView> cardsInHand = new();
 
     private RectTransform rectTransform;
     private CardView currentDraggedCard;
@@ -46,48 +46,69 @@ public class CardContainer : MonoBehaviour {
     private void Start() {
         rectTransform = GetComponent<RectTransform>();
         InitCards();
+        for(int i = 0; i < 5; i++)
+        {
+            AddCardToHand(CardData.Instance.Cards[0]);
+
+        }
+    }
+    void Update() {
+        UpdateCards();
     }
 
     private void InitCards() {
         SetUpCards();
         SetCardsAnchor();
     }
+    public void AddCardToHand(Card cardData)
+    {
+        GameObject newCard = Instantiate(cardPrefab, transform.position, Quaternion.identity,transform);
+        CardView newCardView=newCard.GetComponent<CardView>();
+        newCardView.Init(cardData);
+        cardsInHand.Add(newCardView);
+
+        AddOtherComponentsIfNeeded(newCardView);
+
+        // Pass child card any extra config it should be aware of
+        newCardView.zoomConfig = zoomConfig;
+        newCardView.animationSpeedConfig = animationSpeedConfig;
+        newCardView.eventsConfig = eventsConfig;
+        newCardView.preventCardInteraction = preventCardInteraction;
+        newCardView.container = this;
+    }
 
     private void SetCardsRotation() {
-        for (var i = 0; i < cards.Count; i++) {
-            cards[i].targetRotation = GetCardRotation(i);
-            cards[i].targetVerticalDisplacement = GetCardVerticalDisplacement(i);
+        for (var i = 0; i < cardsInHand.Count; i++) {
+            cardsInHand[i].targetRotation = GetCardRotation(i);
+            cardsInHand[i].targetVerticalDisplacement = GetCardVerticalDisplacement(i);
         }
     }
 
     private float GetCardVerticalDisplacement(int index) {
-        if (cards.Count < 3) return 0;
-        // Associate a vertical displacement based on the index in the cards list
+        if (cardsInHand.Count < 3) return 0;
+        // Associate a vertical displacement based on the index in the cardsInHand list
         // so that the center card is at max displacement while the edges are at 0 displacement
         return maxHeightDisplacement *
-               (1 - Mathf.Pow(index - (cards.Count - 1) / 2f, 2) / Mathf.Pow((cards.Count - 1) / 2f, 2));
+               (1 - Mathf.Pow(index - (cardsInHand.Count - 1) / 2f, 2) / Mathf.Pow((cardsInHand.Count - 1) / 2f, 2));
     }
 
     private float GetCardRotation(int index) {
-        if (cards.Count < 3) return 0;
-        // Associate a rotation based on the index in the cards list
-        // so that the first and last cards are at max rotation, mirrored around the center
-        return -maxCardRotation * (index - (cards.Count - 1) / 2f) / ((cards.Count - 1) / 2f);
+        if (cardsInHand.Count < 3) return 0;
+        // Associate a rotation based on the index in the cardsInHand list
+        // so that the first and last cardsInHand are at max rotation, mirrored around the center
+        return -maxCardRotation * (index - (cardsInHand.Count - 1) / 2f) / ((cardsInHand.Count - 1) / 2f);
     }
 
-    void Update() {
-        UpdateCards();
-    }
 
     void SetUpCards() {
-        cards.Clear();
+        cardsInHand.Clear();
         foreach (Transform card in transform) {
             var wrapper = card.GetComponent<CardView>();
             if (wrapper == null) {
                 wrapper = card.gameObject.AddComponent<CardView>();
             }
 
-            cards.Add(wrapper);
+            cardsInHand.Add(wrapper);
 
             AddOtherComponentsIfNeeded(wrapper);
 
@@ -115,11 +136,11 @@ public class CardContainer : MonoBehaviour {
     }
 
     private void UpdateCards() {
-        if (transform.childCount != cards.Count) {
+        if (transform.childCount != cardsInHand.Count) {
             InitCards();
         }
 
-        if (cards.Count == 0) {
+        if (cardsInHand.Count == 0) {
             return;
         }
 
@@ -130,8 +151,8 @@ public class CardContainer : MonoBehaviour {
     }
 
     private void SetCardsUILayers() {
-        for (var i = 0; i < cards.Count; i++) {
-            cards[i].uiLayer = zoomConfig.defaultSortOrder + i;
+        for (var i = 0; i < cardsInHand.Count; i++) {
+            cardsInHand[i].uiLayer = zoomConfig.defaultSortOrder + i;
         }
     }
 
@@ -139,23 +160,23 @@ public class CardContainer : MonoBehaviour {
         if (!allowCardRepositioning || currentDraggedCard == null) return;
 
         // Get the index of the dragged card depending on its position
-        var newCardIdx = cards.Count(card => currentDraggedCard.transform.position.x > card.transform.position.x);
-        var originalCardIdx = cards.IndexOf(currentDraggedCard);
+        var newCardIdx = cardsInHand.Count(card => currentDraggedCard.transform.position.x > card.transform.position.x);
+        var originalCardIdx = cardsInHand.IndexOf(currentDraggedCard);
         if (newCardIdx != originalCardIdx) {
-            cards.RemoveAt(originalCardIdx);
-            if (newCardIdx > originalCardIdx && newCardIdx < cards.Count - 1) {
+            cardsInHand.RemoveAt(originalCardIdx);
+            if (newCardIdx > originalCardIdx && newCardIdx < cardsInHand.Count - 1) {
                 newCardIdx--;
             }
 
-            cards.Insert(newCardIdx, currentDraggedCard);
+            cardsInHand.Insert(newCardIdx, currentDraggedCard);
         }
         // Also reorder in the hierarchy
         currentDraggedCard.transform.SetSiblingIndex(newCardIdx);
     }
 
     private void SetCardsPosition() {
-        // Compute the total width of all the cards in global space
-        var cardsTotalWidth = cards.Sum(card => card.width * card.transform.lossyScale.x);
+        // Compute the total width of all the cardsInHand in global space
+        var cardsTotalWidth = cardsInHand.Sum(card => card.width * card.transform.lossyScale.x);
         // Compute the width of the container in global space
         var containerWidth = rectTransform.rect.width * transform.lossyScale.x;
         if (forceFitContainer && cardsTotalWidth > containerWidth) {
@@ -170,10 +191,10 @@ public class CardContainer : MonoBehaviour {
         // Get the width of the container
         var width = rectTransform.rect.width * transform.lossyScale.x;
         // Get the distance between each child
-        var distanceBetweenChildren = (width - childrenTotalWidth) / (cards.Count - 1);
+        var distanceBetweenChildren = (width - childrenTotalWidth) / (cardsInHand.Count - 1);
         // Set all children's positions to be evenly spaced out
         var currentX = transform.position.x - width / 2;
-        foreach (CardView child in cards) {
+        foreach (CardView child in cardsInHand) {
             var adjustedChildWidth = child.width * child.transform.lossyScale.x;
             child.targetPosition = new Vector2(currentX + adjustedChildWidth / 2, transform.position.y);
             currentX += adjustedChildWidth + distanceBetweenChildren;
@@ -182,7 +203,7 @@ public class CardContainer : MonoBehaviour {
 
     private void DistributeChildrenWithoutOverlap(float childrenTotalWidth) {
         var currentPosition = GetAnchorPositionByAlignment(childrenTotalWidth);
-        foreach (CardView child in cards) {
+        foreach (CardView child in cardsInHand) {
             var adjustedChildWidth = child.width * child.transform.lossyScale.x;
             child.targetPosition = new Vector2(currentPosition + adjustedChildWidth / 2, transform.position.y);
             currentPosition += adjustedChildWidth;
@@ -195,7 +216,7 @@ public class CardContainer : MonoBehaviour {
     }
 
     private void SetCardsAnchor() {
-        foreach (CardView child in cards) {
+        foreach (CardView child in cardsInHand) {
             child.SetAnchor(new Vector2(0, 0.5f), new Vector2(0, 0.5f));
         }
     }
@@ -216,7 +237,7 @@ public class CardContainer : MonoBehaviour {
     }
     
     public void DestroyCard(CardView card) {
-        cards.Remove(card);
+        cardsInHand.Remove(card);
         eventsConfig.OnCardDestroy?.Invoke(new CardDestroy(card));
         Destroy(card.gameObject);
     }
