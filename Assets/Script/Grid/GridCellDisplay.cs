@@ -8,8 +8,6 @@ public class GridCellDisplay : MonoBehaviour
     public Color posColor = Color.green;
     public Color negColor = Color.red;
     private Color originalColor;
-    public GameObject[] backgrounds;
-    private bool setBackground = false;
 
     public GridCell gridCell;
 
@@ -18,11 +16,6 @@ public class GridCellDisplay : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         gridCell = GetComponent<GridCell>();
         originalColor = spriteRenderer.color;
-    }
-
-    void Update()
-    {
-        if (!setBackground) SetBackground();
     }
 
     void OnMouseEnter()
@@ -43,16 +36,5 @@ public class GridCellDisplay : MonoBehaviour
         spriteRenderer.color = originalColor;
     }
 
-    private void SetBackground()
-    {
-        if (gridCell.gridIndex.x % 2 != 0)
-        {
-            backgrounds[0].SetActive(true);
-        }
-        if (gridCell.gridIndex.y % 2 != 0)
-        {
-            backgrounds[1].SetActive(true);
-        }
-        setBackground = true;
-    }
+   
 }
