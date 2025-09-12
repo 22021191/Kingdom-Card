@@ -321,6 +321,7 @@ RectTransform:
   - {fileID: 2406994942032832393}
   - {fileID: 376139453617575416}
   - {fileID: 130209506653069540}
+  - {fileID: 5304852771400156252}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -378,7 +379,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb8bf83a08deec446bf2be8b431c3a10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardId: 1
   nameText: {fileID: 5205878871120619359}
   descriptionText: {fileID: 3833117227719943776}
   priceText: {fileID: 8078613138170796212}
@@ -387,6 +387,8 @@ MonoBehaviour:
   targetPosition: {x: 0, y: 0}
   targetVerticalDisplacement: 0
   uiLayer: 0
+  playPos: {x: 200, y: 600, z: 0}
+  arrow: {fileID: 5721843128768871961}
   canvas: {fileID: 0}
   zoomConfig:
     zoomOnHover: 0
@@ -702,6 +704,58 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &5721843128768871961
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5304852771400156252}
+  - component: {fileID: 5690991362564603469}
+  m_Layer: 0
+  m_Name: PlayArrow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &5304852771400156252
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5721843128768871961}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -3.3078983}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2057415777338291997}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5690991362564603469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5721843128768871961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c285a7569a82914ab9aa7ebbcb64ad1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arrowPrefab: {fileID: 4670394966861423776, guid: febb07028956f5e4b88f107cf9e52ace, type: 3}
+  dotPrefab: {fileID: 3701783647959284065, guid: c99d7c81fe21ad7419ab399ef2616052, type: 3}
+  poolSize: 50
+  spacing: 50
+  arrowAngleAdjustment: 0
+  dotsToSkip: 1
+  baseScreenWidth: 1920
+  spacingScale: 0
 --- !u!1 &7028798896826730418
 GameObject:
   m_ObjectHideFlags: 0

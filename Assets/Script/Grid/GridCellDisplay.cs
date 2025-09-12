@@ -22,6 +22,7 @@ public class GridCellDisplay : MonoBehaviour
     {
         if (!GameManager.Instance.PlayingCard)
         {
+            Debug.Log("ok");
             spriteRenderer.color = highlightColor;
         }
         else if (gridCell.cellFull || gridCell.gridIndex.x > 1)

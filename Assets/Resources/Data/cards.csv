@@ -1,4 +1,4 @@
 Id,IdImage,Type,Rarity,Name,Cost,PopCost,EffectValueA,EffectValueB,EffectValueC,EffectValueD,EffectType,Effect,Description,Price
 1,Card _1,0,1,Warrior,3,1,10,0,0,0,0,AttackBoost,Increase attack by 10,50
-2,Card _2,1,2,Archer,2,1,5,0,0,0,0,RangeBoost,Increase range by 5,60
+2,Card _2,1,2,Archer,2,1,5,0,0,0,2,RangeBoost,Increase range by 5,60
 3,Card _3,2,3,Mage,4,2,20,0,0,0,1,MagicBlast,Deal 20 damage to enemy,100

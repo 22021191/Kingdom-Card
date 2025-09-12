@@ -27,6 +27,8 @@ public class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public float targetVerticalDisplacement;
     public int uiLayer;
 
+    public Vector3 playPos;
+    public GameObject arrow;
     private RectTransform rectTransform;
     public Canvas canvas;
     #endregion
@@ -123,10 +125,15 @@ public class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             rectTransform.position = Vector2.Lerp(rectTransform.position, target,
                 repositionSpeed / distance * Time.deltaTime);
         }
-        else
+        else if (card.Type == CardType.Random||playPos==null)
         {
             var delta = ((Vector2)Input.mousePosition + dragStartPos);
             rectTransform.position = new Vector2(delta.x, delta.y);
+        }
+        else
+        {
+            rectTransform.position = playPos;
+            arrow.SetActive(true);
         }
     }
 
@@ -142,17 +149,13 @@ public class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     private void UpdateRotation()
     {
         var crtAngle = rectTransform.rotation.eulerAngles.z;
-        // If the angle is negative, add 360 to it to get the positive equivalent
         crtAngle = crtAngle < 0 ? crtAngle + 360 : crtAngle;
-        // If the card is hovered and the rotation should be reset, set the target rotation to 0
         var tempTargetRotation = (isHovered || isDragged) && zoomConfig.resetRotationOnZoom
             ? 0
             : targetRotation;
         tempTargetRotation = tempTargetRotation < 0 ? tempTargetRotation + 360 : tempTargetRotation;
         var deltaAngle = Mathf.Abs(crtAngle - tempTargetRotation);
         if (!(deltaAngle > EPS)) return;
-
-        // Adjust the current angle and target angle so that the rotation is done in the shortest direction
         var adjustedCurrent = deltaAngle > 180 && crtAngle < tempTargetRotation ? crtAngle + 360 : crtAngle;
         var adjustedTarget = deltaAngle > 180 && crtAngle > tempTargetRotation
             ? tempTargetRotation + 360
@@ -175,6 +178,7 @@ public class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public void OnPointerUp(PointerEventData eventData)
     {
         isDragged = false;
+        arrow.SetActive(false);
         container.OnCardDragEnd();
     }
 
@@ -192,18 +196,23 @@ public class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
         eventsConfig?.OnCardHover?.Invoke(new CardHover(this));
         isHovered = true;
+       /* if (card.Type == CardType.Random || playPos == null)
+        {
+            return;
+        }
+        arrow.SetActive(true);*/
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         if (isDragged)
         {
-            // Avoid hover events while dragging
             return;
         }
         canvas.sortingOrder = uiLayer;
         isHovered = false;
         eventsConfig?.OnCardUnhover?.Invoke(new CardUnhover(this));
+        arrow.SetActive(false);
     }
 
     public void OnPointerDown(PointerEventData eventData)

@@ -42,7 +42,7 @@ public class CardData : MonoBehaviour
             Card card = new Card();
             card.Id = int.Parse(values[0]);
             card.IdImage = values[1];
-            card.Type = int.Parse(values[2]);
+            card.Type = (CardType)int.Parse(values[2]);
             card.Rarity = int.Parse(values[3]);
             card.Name = values[4];
             card.Cost = int.Parse(values[5]);
